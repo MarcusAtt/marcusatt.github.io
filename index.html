@@ -166,3 +166,36 @@
   #reels > div:last-child iframe,
   #reels > div:last-child blockquote { display: none !important; }
 </style>
+
+<style>
+  .preview-reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .preview-reveal.is-visible { opacity: 1; transform: none; }
+  .cert-preview-controls { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin:1.5rem 0 .75rem; }
+  .cert-preview-hint { color:#475569; font-size:.875rem; font-weight:700; }
+  .cert-preview-buttons { display:flex; gap:.5rem; }
+  .cert-preview-buttons button { display:inline-flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border:1px solid #bfdbfe; border-radius:9999px; background:#eff6ff; color:#1d4ed8; font-size:1.25rem; font-weight:900; cursor:pointer; }
+  .cert-preview-buttons button:hover { background:#dbeafe; }
+  .cert-preview-buttons button:focus-visible { outline:3px solid #2563eb; outline-offset:3px; }
+  @media (prefers-reduced-motion: reduce) { .preview-reveal { opacity:1; transform:none; transition:none; } }
+</style>
+<script>
+(() => {
+  const certSection = document.getElementById('certifications');
+  const scroller = certSection && (certSection.querySelector('.overflow-x-auto') || certSection.querySelector('[class*="overflow-x"]'));
+  if (scroller && !certSection.querySelector('.cert-preview-controls')) {
+    const controls = document.createElement('div');
+    controls.className = 'cert-preview-controls';
+    controls.innerHTML = '<span class="cert-preview-hint">Swipe or use the arrows to explore all 7 credentials.</span><div class="cert-preview-buttons"><button type="button" aria-label="Previous certification">←</button><button type="button" aria-label="Next certification">→</button></div>';
+    scroller.parentNode.insertBefore(controls, scroller);
+    const buttons = controls.querySelectorAll('button');
+    buttons[0].addEventListener('click', () => scroller.scrollBy({ left: -360, behavior: 'smooth' }));
+    buttons[1].addEventListener('click', () => scroller.scrollBy({ left: 360, behavior: 'smooth' }));
+  }
+  const targets = document.querySelectorAll('section:not(#home), #resume article, #certifications article, #portfolio article');
+  targets.forEach((el) => el.classList.add('preview-reveal'));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { threshold: .12 });
+    targets.forEach((el) => observer.observe(el));
+  } else { targets.forEach((el) => el.classList.add('is-visible')); }
+})();
+</script>
