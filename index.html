@@ -146,7 +146,9 @@
         <h2 id="reel-modal-title" class="text-lg font-black text-ink">ThePopTwins Instagram Reel</h2>
         <button id="close-reel-modal" type="button" class="rounded-full bg-ink px-4 py-2 text-sm font-bold text-white hover:bg-slate" aria-label="Close Instagram Reel">Close</button>
       </div>
-      <iframe id="reel-modal-frame" title="ThePopTwins Instagram Reel" data-src="https://www.instagram.com/reel/DeaaH1OvLKM/embed/" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      <blockquote id="reel-modal-embed" class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DeaaH1OvLKM/" data-instgrm-version="14" style="background:#FFF;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15);margin:1px auto;max-width:540px;min-width:280px;padding:0;width:calc(100% - 2px);">
+        <div style="padding:16px;text-align:center;"><a href="https://www.instagram.com/reel/DeaaH1OvLKM/" target="_blank" rel="noopener" style="font-weight:700;color:#2563EB;">View this post on Instagram ↗</a></div>
+      </blockquote>
       <p class="px-3 pb-3 text-center text-sm text-slate">If the preview does not load, <a class="font-bold text-gold underline" href="https://www.instagram.com/reel/DeaaH1OvLKM/" target="_blank" rel="noopener">open the Reel directly on Instagram ↗</a>.</p>
     </div>
   </div>
@@ -154,19 +156,18 @@
     const reelModal = document.getElementById('reel-modal');
     const openReelModal = document.getElementById('open-reel-modal');
     const closeReelModal = document.getElementById('close-reel-modal');
-    const reelModalFrame = document.getElementById('reel-modal-frame');
+    const reelModalEmbed = document.getElementById('reel-modal-embed');
     let lastReelTrigger = null;
     function openReel() {
       lastReelTrigger = document.activeElement;
       reelModal.hidden = false;
       document.body.classList.add('overflow-hidden');
-      reelModalFrame.src = reelModalFrame.dataset.src;
+      if (window.instgrm?.Embeds) window.instgrm.Embeds.process();
       closeReelModal.focus();
     }
     function closeReel() {
       reelModal.hidden = true;
       document.body.classList.remove('overflow-hidden');
-      reelModalFrame.src = '';
       (lastReelTrigger || openReelModal).focus();
     }
     openReelModal?.addEventListener('click', (event) => { event.preventDefault(); openReel(); });
