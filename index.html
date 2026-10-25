@@ -20,7 +20,7 @@
     #reel-modal[hidden] { display: none; }
     #reel-modal { background: rgba(15, 23, 42, 0.82); }
     #reel-modal .reel-dialog { max-height: calc(100vh - 2rem); }
-    #reel-modal iframe { width: min(540px, 100%); height: min(760px, calc(100vh - 8rem)); }
+    #reel-modal video { width: min(540px, 100%); height: min(760px, calc(100vh - 8rem)); object-fit: contain; }
     #reel-modal .reel-frame { display: block; width: 100%; min-height: 620px; border: 0; border-radius: .75rem; background: #fff; }
   </style>
 </head>
@@ -148,7 +148,7 @@
         <button id="close-reel-modal" type="button" class="rounded-full bg-ink px-4 py-2 text-sm font-bold text-white hover:bg-slate" aria-label="Close Instagram Reel">Close</button>
       </div>
       <div class="rounded-xl bg-slate-100 p-2">
-        <iframe class="reel-frame" title="ThePopTwins Instagram Reel" src="https://www.instagram.com/reel/DeaaH1OvLKM/embed/" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+        <video class="reel-frame" title="ThePopTwins Instagram Reel" controls playsinline preload="metadata"><source src="/cc3350d93fdf4c11ac874d2b5aa610cb.MOV" type="video/quicktime">Your browser does not support the video player.</video>
       </div>
       <p class="px-3 pb-3 pt-3 text-center text-sm text-slate">The Reel is displayed inside this site. If Instagram blocks the embedded player, use the close button and try again later.</p>
     </div>
