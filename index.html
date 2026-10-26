@@ -179,18 +179,27 @@
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !reelModal.hidden) closeReel(); });
   </script>
 
-  <div id="deck-modal" hidden aria-hidden="true" style="display:none" class="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="deck-modal-title"><div class="relative max-h-[92vh] w-full max-w-5xl overflow-auto rounded-2xl bg-white p-3 shadow-2xl"><div class="flex items-center justify-between gap-4 px-3 py-2"><h2 id="deck-modal-title" class="text-lg font-black text-ink">Patagonia Worn Wear Campaign Slide Deck</h2><button id="close-deck-modal" type="button" class="rounded-full bg-ink px-4 py-2 text-sm font-bold text-white hover:bg-slate" aria-label="Close Patagonia slide deck">Close</button></div><div class="overflow-hidden rounded-xl bg-slate-100"><iframe title="Patagonia Worn Wear campaign slide deck" src="/annotated-Final%2520Project%2520COMM%25203313.pdf#page=1&view=FitH" class="h-[55vh] min-h-[360px] w-full border-0"></iframe></div><div class="mt-3 grid grid-cols-3 gap-2" aria-label="Slide deck preview images"><img src="/slide-01.png" alt="Patagonia R.O.P.E. Model title slide" class="aspect-video w-full rounded-lg object-cover"><img src="/slide-02.png" alt="Patagonia Worn Wear pop-up kiosk concept" class="aspect-video w-full rounded-lg object-cover"><img src="/slide-03.png" alt="Patagonia student giveaway concept" class="aspect-video w-full rounded-lg object-cover"></div><p class="px-3 pb-2 pt-3 text-center text-sm text-slate">Preview the campaign visuals here or use the slide deck viewer above.</p></div></div>
-  <script>
+  <div id="deck-modal" hidden aria-hidden="true" style="display:none" class="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="deck-modal-title"><div class="relative max-h-[92vh] w-full max-w-5xl overflow-auto rounded-2xl bg-white p-3 shadow-2xl"><div class="flex items-center justify-between gap-4 px-3 py-2"><h2 id="deck-modal-title" class="text-lg font-black text-ink">Patagonia Worn Wear Campaign Slide Deck</h2><button id="close-deck-modal" type="button" class="rounded-full bg-ink px-4 py-2 text-sm font-bold text-white hover:bg-slate" aria-label="Close Patagonia slide deck">Close</button></div><div class="rounded-xl bg-slate-100 p-3"><img id="deck-slide-image" src="/slide-01.png" alt="Patagonia R.O.P.E. Model title slide" class="mx-auto max-h-[65vh] w-full object-contain" decoding="async"></div><div class="mt-4 flex items-center justify-between gap-4 px-2"><button id="deck-prev" type="button" class="rounded-full border-2 border-gold px-5 py-3 text-2xl font-bold leading-none text-gold hover:bg-gold hover:text-white disabled:cursor-not-allowed disabled:opacity-40" aria-label="Previous slide">←</button><p id="deck-slide-count" class="text-sm font-bold text-slate" aria-live="polite">Slide 1 of 10</p><button id="deck-next" type="button" class="rounded-full border-2 border-gold px-5 py-3 text-2xl font-bold leading-none text-gold hover:bg-gold hover:text-white disabled:cursor-not-allowed disabled:opacity-40" aria-label="Next slide">→</button></div><p class="px-3 pb-2 pt-3 text-center text-sm text-slate">Use the arrows to move through the campaign visuals.</p></div></div><script>
     const deckModal = document.getElementById('deck-modal');
     const deckTriggers = document.querySelectorAll('.open-deck-modal');
     const closeDeckModal = document.getElementById('close-deck-modal');
+    const deckImage = document.getElementById('deck-slide-image');
+    const deckCount = document.getElementById('deck-slide-count');
+    const deckPrev = document.getElementById('deck-prev');
+    const deckNext = document.getElementById('deck-next');
+    const deckSlides = Array.from({length: 10}, (_, index) => ({ src: '/slide-' + String(index + 1).padStart(2, '0') + '.png', alt: 'Patagonia Worn Wear campaign slide ' + (index + 1) }));
+    let deckIndex = 0;
     let lastDeckTrigger = null;
-    function openDeck() { lastDeckTrigger = document.activeElement; deckModal.hidden = false; deckModal.style.display = 'flex'; deckModal.setAttribute('aria-hidden', 'false'); document.body.classList.add('overflow-hidden'); closeDeckModal.focus(); }
+    function renderDeckSlide() { deckImage.src = deckSlides[deckIndex].src; deckImage.alt = deckSlides[deckIndex].alt; deckCount.textContent = 'Slide ' + (deckIndex + 1) + ' of ' + deckSlides.length; deckPrev.disabled = deckIndex === 0; deckNext.disabled = deckIndex === deckSlides.length - 1; }
+    function openDeck() { lastDeckTrigger = document.activeElement; deckIndex = 0; renderDeckSlide(); deckModal.hidden = false; deckModal.style.display = 'flex'; deckModal.setAttribute('aria-hidden', 'false'); document.body.classList.add('overflow-hidden'); closeDeckModal.focus(); }
     function closeDeck() { deckModal.hidden = true; deckModal.style.display = 'none'; deckModal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('overflow-hidden'); (lastDeckTrigger || deckTriggers[0])?.focus(); }
+    function moveDeck(direction) { deckIndex = Math.max(0, Math.min(deckSlides.length - 1, deckIndex + direction)); renderDeckSlide(); }
     deckTriggers.forEach((trigger) => trigger.addEventListener('click', openDeck));
     closeDeckModal?.addEventListener('click', closeDeck);
+    deckPrev?.addEventListener('click', () => moveDeck(-1));
+    deckNext?.addEventListener('click', () => moveDeck(1));
     deckModal?.addEventListener('click', (event) => { if (event.target === deckModal) closeDeck(); });
-    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && deckModal && !deckModal.hidden) closeDeck(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && deckModal && !deckModal.hidden) closeDeck(); if (deckModal && !deckModal.hidden && event.key === 'ArrowLeft') moveDeck(-1); if (deckModal && !deckModal.hidden && event.key === 'ArrowRight') moveDeck(1); });
   </script>
 </body><div id="codex-browser-sidebar-comments-root" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483647;"></div></html>
 <html lang="en" class="scroll-smooth"><head>
